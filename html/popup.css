@@ -1,0 +1,1145 @@
+/* ============================================================
+   FLUID LOGIC 2026 — 4PDA Live
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap');
+
+/* ============================================================
+   CSS VARIABLES
+   ============================================================ */
+:root {
+  --space-xs: 3px;
+  --space-sm: 6px;
+  --space-md: 8px;
+  --space-lg: 12px;
+  --space-xl: 20px;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --font-xs:  10px;
+  --font-sm:  11px;
+  --font-md:  12px;
+  --font-lg:  13px;
+  --font-xl:  15px;
+
+  --t-fast:   0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================
+   FIREFOX DARK (default)
+   ============================================================ */
+body,
+body[data-theme="dark"],
+body[data-theme="auto"],
+body:not([data-theme]) {
+  --bg:            #1C1B22;
+  --bg-2:          #252433;
+  --bg-3:          #2F2E3E;
+  --bg-4:          #393848;
+  --text:          #FBFBFE;
+  --text-2:        #C4C4D0;
+  --text-3:        #8A8A9E;
+  --border:        rgba(255,255,255,0.07);
+  --border-md:     rgba(255,255,255,0.11);
+  --border-hi:     rgba(255,255,255,0.20);
+  --shadow:        rgba(0,0,0,0.50);
+  --accent:        #1A8FFF;
+  --accent-glow:   rgba(26,143,255,0.30);
+  --accent-soft:   rgba(26,143,255,0.13);
+  --inset-hi:      rgba(255,255,255,0.04);
+  --card-bg:       #252433;
+  --card-shadow:   0 4px 20px rgba(0,0,0,0.30);
+  --card-inset:    inset 0 1px 0 rgba(255,255,255,0.05);
+  /* Stat tiles — unified, no border, bg slightly lighter than --bg */
+  --stat-tile-bg:    #2D2C3C;
+  --stat-tile-hover: #343348;
+  --scrollbar-thumb: rgba(255,255,255,0.16);
+  --scrollbar-thumb-hover: rgba(255,255,255,0.30);
+}
+
+/* ============================================================
+   LIGHT THEME — лляной/молочный
+   ============================================================ */
+body[data-theme="light"] {
+  --bg:            #F5F3EE;
+  --bg-2:          #EDEAE3;
+  --bg-3:          #E4E0D8;
+  --bg-4:          #D9D4C9;
+  --text:          #1A1915;
+  --text-2:        #5A5750;
+  --text-3:        #96938B;
+  --border:        rgba(30,25,15,0.07);
+  --border-md:     rgba(30,25,15,0.11);
+  --border-hi:     rgba(30,25,15,0.20);
+  --shadow:        rgba(0,0,0,0.08);
+  --accent:        #0060CC;
+  --accent-glow:   rgba(0,96,204,0.20);
+  --accent-soft:   rgba(0,96,204,0.10);
+  --inset-hi:      rgba(255,255,255,0.65);
+  --card-bg:       #EDEAE3;
+  --card-shadow:   0 3px 16px rgba(0,0,0,0.07);
+  --card-inset:    inset 0 1px 0 rgba(255,255,255,0.55);
+  --stat-tile-bg:    #E5E1D9;
+  --stat-tile-hover: #DDD9D0;
+  --scrollbar-thumb: rgba(0,0,0,0.16);
+  --scrollbar-thumb-hover: rgba(0,0,0,0.28);
+}
+
+/* ============================================================
+   LIQUID GLASS
+   ============================================================ */
+body[data-theme="liquid-glass"] {
+  --bg:            #06060F;
+  --bg-2:          rgba(255,255,255,0.042);
+  --bg-3:          rgba(255,255,255,0.075);
+  --bg-4:          rgba(255,255,255,0.10);
+  --text:          rgba(255,255,255,0.96);
+  --text-2:        rgba(255,255,255,0.60);
+  --text-3:        rgba(255,255,255,0.36);
+  --border:        rgba(255,255,255,0.08);
+  --border-md:     rgba(255,255,255,0.13);
+  --border-hi:     rgba(255,255,255,0.24);
+  --shadow:        rgba(0,0,0,0.60);
+  --accent:        #2C9BFF;
+  --accent-glow:   rgba(44,155,255,0.40);
+  --accent-soft:   rgba(44,155,255,0.15);
+  --inset-hi:      rgba(255,255,255,0.07);
+  --card-bg:       rgba(255,255,255,0.046);
+  --card-shadow:   0 8px 32px rgba(0,0,0,0.45);
+  --card-inset:    inset 0 1px 0 rgba(255,255,255,0.08);
+  --glass-blur:      16px;
+  --glass-saturate:  190%;
+  --glass-bg:        rgba(255,255,255,0.05);
+  --glass-bg-hover:  rgba(255,255,255,0.08);
+  --glass-border:    rgba(255,255,255,0.10);
+  --glass-border-hi: rgba(255,255,255,0.18);
+  --glass-inset:     inset 0 1px 0 rgba(255,255,255,0.10), inset 0 0 0 1px rgba(255,255,255,0.04);
+  /* Stat tiles for glass — semi-transparent, no border */
+  --stat-tile-bg:    rgba(43,42,51,0.60);
+  --stat-tile-hover: rgba(43,42,51,0.75);
+  --scrollbar-thumb: rgba(255,255,255,0.14);
+  --scrollbar-thumb-hover: rgba(255,255,255,0.26);
+}
+
+/* ── Accent overrides — Dark / Auto (насыщенные, чуть тёплые) ── */
+body[data-accent="teal"]   { --accent:#00C4BC; --accent-glow:rgba(0,196,188,0.28); --accent-soft:rgba(0,196,188,0.11); }
+body[data-accent="purple"] { --accent:#9B6DFF; --accent-glow:rgba(155,109,255,0.28); --accent-soft:rgba(155,109,255,0.11); }
+body[data-accent="orange"] { --accent:#FF7A00; --accent-glow:rgba(255,122,0,0.28); --accent-soft:rgba(255,122,0,0.11); }
+
+/* ── Accent overrides — Light (темнее на 15-20% для контраста на белом) ── */
+body[data-theme="light"][data-accent="blue"]   { --accent:#0060CC; --accent-glow:rgba(0,96,204,0.20); --accent-soft:rgba(0,96,204,0.10); }
+body[data-theme="light"][data-accent="teal"]   { --accent:#008E89; --accent-glow:rgba(0,142,137,0.20); --accent-soft:rgba(0,142,137,0.09); }
+body[data-theme="light"][data-accent="purple"] { --accent:#7C3AED; --accent-glow:rgba(124,58,237,0.20); --accent-soft:rgba(124,58,237,0.09); }
+body[data-theme="light"][data-accent="orange"] { --accent:#D4700A; --accent-glow:rgba(212,112,10,0.20); --accent-soft:rgba(212,112,10,0.09); }
+
+/* ── Accent overrides — Liquid Glass (яркие, неоновые, сильный glow) ── */
+body[data-theme="liquid-glass"][data-accent="blue"]   { --accent:#2C9BFF; --accent-rgb:44,155,255;  --accent-glow:rgba(44,155,255,0.45);  --accent-soft:rgba(44,155,255,0.16); }
+body[data-theme="liquid-glass"][data-accent="teal"]   { --accent:#00D4CC; --accent-rgb:0,212,204;   --accent-glow:rgba(0,212,204,0.42);   --accent-soft:rgba(0,212,204,0.15); }
+body[data-theme="liquid-glass"][data-accent="purple"] { --accent:#A855F7; --accent-rgb:168,85,247;  --accent-glow:rgba(168,85,247,0.45);  --accent-soft:rgba(168,85,247,0.16); }
+body[data-theme="liquid-glass"][data-accent="orange"] { --accent:#FF6B00; --accent-rgb:255,107,0;   --accent-glow:rgba(255,107,0,0.42);   --accent-soft:rgba(255,107,0,0.15); }
+body[data-theme="liquid-glass"]:not([data-accent])    { --accent:#2C9BFF; --accent-rgb:44,155,255;  --accent-glow:rgba(44,155,255,0.45);  --accent-soft:rgba(44,155,255,0.16); }
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   POPUP BODY — font, size, glass edge border
+   ============================================================ */
+body {
+  font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-size: var(--font-md);
+  width: 360px;
+  min-width: 360px;
+  max-width: 360px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Subtle top-edge glass highlight */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* Liquid Glass: rainbow-edge border */
+body[data-theme="liquid-glass"] {
+  background: radial-gradient(ellipse 80% 60% at 30% 0%, #0d0a2a 0%, #060610 60%) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 -1px 0 rgba(255,255,255,0.04);
+}
+
+.hidden { display: none !important; }
+#templates { display: none !important; position: absolute; visibility: hidden; }
+
+/* ============================================================
+   SCROLLBAR — ultra-minimal, themed
+   ============================================================ */
+main::-webkit-scrollbar              { width: 4px; }
+main::-webkit-scrollbar-track        { background: transparent; }
+main::-webkit-scrollbar-thumb        {
+  background: rgba(255,255,255,0.10);
+  border-radius: 10px;
+}
+main::-webkit-scrollbar-thumb:hover  { background: rgba(255,255,255,0.20); }
+main { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.10) transparent; }
+
+body[data-theme="light"] main::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
+body[data-theme="light"] main::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.22); }
+body[data-theme="light"] main { scrollbar-color: rgba(0,0,0,0.12) transparent; }
+
+/* Options page scrollbar */
+body::-webkit-scrollbar              { width: 4px; }
+body::-webkit-scrollbar-track        { background: transparent; }
+body::-webkit-scrollbar-thumb        { background: rgba(255,255,255,0.10); border-radius: 10px; }
+body::-webkit-scrollbar-thumb:hover  { background: rgba(255,255,255,0.20); }
+.content::-webkit-scrollbar          { width: 4px; }
+.content::-webkit-scrollbar-track    { background: transparent; }
+.content::-webkit-scrollbar-thumb    { background: rgba(255,255,255,0.10); border-radius: 10px; }
+.content::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.20); }
+
+/* ============================================================
+   SVG ICONS
+   ============================================================ */
+.icon {
+  display: inline-block;
+  width: 18px; height: 18px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+}
+.icon-sm { width: 14px; height: 14px; }
+.icon-lg { width: 22px; height: 22px; }
+.icon-xl { width: 26px; height: 26px; }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header {
+  background: var(--bg) !important;
+  padding: 16px 14px 13px;
+  border-bottom: 1px solid var(--border) !important;
+  position: relative;
+  z-index: 10;
+}
+
+body[data-theme="liquid-glass"] header {
+  background: rgba(6,6,16,0.55) !important;
+  backdrop-filter: blur(24px) saturate(var(--glass-saturate, 190%));
+  -webkit-backdrop-filter: blur(24px) saturate(var(--glass-saturate, 190%));
+  border-bottom: 1px solid var(--glass-border) !important;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.07);
+}
+
+body:has(main.hidden) header { border-bottom: none; }
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* -- user info -- */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: var(--font-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text) !important;
+  transition: color var(--t-fast);
+}
+.user-info:hover { color: var(--accent) !important; }
+
+.user-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--border-md);
+  background: var(--bg-3);
+}
+
+/* -- header icon buttons: thinner stroke, dimmer at rest ── */
+.refresh-btn,
+.settings-btn,
+.compact-toggle {
+  background: none !important;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  /* dimmer at rest — opacity 0.45 */
+  color: var(--text-3) !important;
+  opacity: 0.45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: color var(--t-fast), background var(--t-fast), opacity var(--t-fast);
+}
+/* Thinner stroke on icons inside header buttons */
+.refresh-btn .icon,
+.settings-btn .icon,
+.compact-toggle .icon {
+  stroke-width: 1.5;
+}
+.refresh-btn:hover,
+.settings-btn:hover,
+.compact-toggle:hover {
+  color: var(--accent) !important;
+  background: var(--accent-soft) !important;
+  opacity: 1;
+}
+.compact-toggle.active {
+  color: var(--accent) !important;
+  background: var(--accent-soft) !important;
+  opacity: 1;
+}
+
+.refresh-btn.spinning .icon { animation: spin 0.7s linear infinite; }
+.settings-btn .icon { transition: transform 0.3s ease; stroke-width: 1.5; }
+.settings-btn:hover .icon { transform: rotate(90deg); }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* -- time / date -- */
+.header-time {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 5px;
+}
+.time-clock {
+  font-size: var(--font-md);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: inherit;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.time-date {
+  font-size: var(--font-xs);
+  font-weight: 400;
+  font-style: normal;
+  font-family: inherit;
+  color: var(--text-3);
+  line-height: 1;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   BENTO STATS DASHBOARD
+   ============================================================ */
+.stats-container { margin-top: 0; }
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.stats-title {
+  font-size: 8px;
+  color: var(--text-3) !important;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 700;
+}
+
+/* Bento grid — 3 cells, varying visual mass */
+.stats-cards {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  gap: 5px;
+}
+
+/* ── Единая «плитка»: NO border, bg на 2 тона светлее основного ── */
+.stat-card {
+  position: relative;
+  background: var(--stat-tile-bg) !important;
+  border: none !important;
+  border-radius: var(--radius-md);
+  padding: 8px 8px 7px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: none;
+  transition:
+    transform var(--t-spring),
+    background var(--t-normal),
+    box-shadow var(--t-normal);
+  will-change: transform;
+}
+
+/* Subtle inset sheen — only at top */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, var(--inset-hi) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Hover — lift only, no border flash */
+.stat-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: var(--stat-tile-hover) !important;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+/* Active filter tab — soft neon, not hard border */
+.stat-card.active {
+  background: var(--accent-soft) !important;
+  box-shadow:
+    0 0 0 1px var(--accent) inset,
+    0 0 18px 4px var(--accent-glow),
+    0 4px 20px rgba(0,0,0,0.25),
+    inset 0 0 10px rgba(0, 96, 223, 0.22);
+}
+.stat-card.active .stat-number { color: var(--accent) !important; }
+.stat-card.active .stat-icon   { color: var(--accent) !important; filter: drop-shadow(0 0 8px var(--accent-glow)); opacity: 1 !important; }
+
+/* Liquid Glass: inactive icons dimmed, active at full opacity */
+body[data-theme="liquid-glass"] .stat-icon        { opacity: 0.40; }
+body[data-theme="liquid-glass"] .stat-card.active .stat-icon,
+body[data-theme="liquid-glass"] .stat-card:hover .stat-icon { opacity: 1; }
+
+/* ── Icon: accent-colored with permanent soft glow ── */
+.stat-icon {
+  width: 18px; height: 18px;
+  color: var(--accent) !important;
+  filter: drop-shadow(0 0 4px var(--accent-glow));
+  transition: filter var(--t-normal), transform var(--t-spring);
+}
+.stat-card:hover .stat-icon {
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+  transform: scale(1.12);
+}
+
+/* Breathing animation when QMS has unread */
+.stat-card[data-has-unread="true"] .stat-icon {
+  animation: breathe 2.6s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { filter: drop-shadow(0 0 3px var(--accent-glow)); opacity: 1; }
+  50%       { filter: drop-shadow(0 0 9px var(--accent-glow)); opacity: 0.65; }
+}
+
+/* ── Label: tiny, caps, tracked — subordinate ── */
+.stat-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-3) !important;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* ── Number: dominant, large, bold ── */
+.stat-number {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text) !important;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  min-width: 22px;
+  position: relative;
+  overflow: hidden;
+  /* Subtle glow that ties it to the icon */
+  text-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* Flip counter */
+@keyframes countFlipOut {
+  0%   { transform: translateY(0);     opacity: 1; }
+  100% { transform: translateY(-120%); opacity: 0; }
+}
+@keyframes countFlipIn {
+  0%   { transform: translateY(120%);  opacity: 0; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
+.stat-number.animating-out { animation: countFlipOut 0.18s cubic-bezier(0.4,0,0.2,1) forwards; }
+.stat-number.animating-in  { animation: countFlipIn  0.18s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+/* Liquid Glass stat tiles: rgba bg + blur so browser peeks through */
+body[data-theme="liquid-glass"] .stat-card {
+  background: var(--stat-tile-bg) !important;
+  backdrop-filter: blur(var(--glass-blur, 16px)) saturate(var(--glass-saturate, 190%));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) saturate(var(--glass-saturate, 190%));
+  border: 1px solid var(--glass-border) !important;
+}
+body[data-theme="liquid-glass"] .stat-card:hover {
+  background: var(--stat-tile-hover) !important;
+  border-color: var(--glass-border-hi) !important;
+}
+body[data-theme="liquid-glass"] .stat-card.active {
+  background: rgba(44,155,255,0.18) !important;
+  box-shadow: 0 0 0 1.5px var(--accent) inset, 0 0 16px var(--accent-glow);
+}
+body[data-theme="liquid-glass"] .stat-number {
+  text-shadow: 0 0 18px var(--accent-glow);
+}
+
+/* QMS dots */
+body[data-theme="light"] .qms-dot          { fill: var(--bg-2) !important; }
+body[data-theme="dark"] .qms-dot,
+body:not([data-theme]) .qms-dot,
+body[data-theme="auto"] .qms-dot           { fill: #1C1B22 !important; }
+body[data-theme="liquid-glass"] .qms-dot   { fill: #06060F !important; }
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+.action-buttons {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  background: var(--bg-2);
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-sm);
+  padding: 6px var(--space-sm);
+  color: var(--text-2);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: inherit;
+  height: 26px;
+  white-space: nowrap;
+  transition: all var(--t-fast);
+}
+.action-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+body[data-theme="liquid-glass"] .action-btn {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(var(--glass-saturate, 190%));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--glass-saturate, 190%));
+  border: 1px solid var(--glass-border) !important;
+}
+
+.btn-icon { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+main {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: clip;
+  background: var(--bg);
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable; /* prevents layout shift when scrollbar appears */
+}
+main:not(.hidden) { padding: var(--space-md); }
+body[data-theme="liquid-glass"] main { background: transparent !important; }
+
+/* ============================================================
+   TOPIC CARDS — Z-axis depth, borderless float
+   ============================================================ */
+.topics-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;  /* was 5px — more air between cards */
+}
+
+.topic-card {
+  background: var(--card-bg) !important;
+  /* No border — float via shadow */
+  border: none !important;
+  border-radius: var(--radius-md);
+  padding: 10px 10px 10px 12px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  gap: var(--space-sm);
+  overflow: hidden;
+  /* The "hover" shadow, dimmed at rest */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+  transition:
+    transform var(--t-spring),
+    box-shadow var(--t-normal);
+  animation: cardSlideIn 0.22s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+.topic-card:nth-child(1) { animation-delay: 0.03s; }
+.topic-card:nth-child(2) { animation-delay: 0.07s; }
+.topic-card:nth-child(3) { animation-delay: 0.11s; }
+.topic-card:nth-child(4) { animation-delay: 0.15s; }
+.topic-card:nth-child(5) { animation-delay: 0.19s; }
+
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Very subtle top-to-bottom gradient — almost invisible */
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, var(--inset-hi) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Hover: micro-lift up + stronger shadow = floating effect */
+.topic-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.36), 0 2px 8px rgba(0,0,0,0.20);
+}
+
+/* Perimeter accent glow on hover */
+.topic-card:hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--accent-glow);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Liquid Glass cards: semi-transparent, optimized blur */
+body[data-theme="liquid-glass"] .topic-card {
+  background: rgba(43,42,51,0.58) !important;
+  backdrop-filter: blur(12px) saturate(var(--glass-saturate, 190%));
+  -webkit-backdrop-filter: blur(12px) saturate(var(--glass-saturate, 190%));
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.40), var(--glass-inset);
+  will-change: auto;
+}
+body[data-theme="liquid-glass"] .topic-card:hover {
+  background: rgba(43,42,51,0.70) !important;
+  border-color: var(--glass-border-hi) !important;
+  box-shadow: 0 14px 36px rgba(0,0,0,0.52);
+}
+
+.topic-card.pinned {
+  border-left: 2.5px solid var(--accent) !important;
+  background: var(--accent-soft) !important;
+}
+
+.topic-card.read { opacity: 0.55; }
+.topic-card.read .topic-title { font-weight: 400; color: var(--text-2); }
+.topic-card.unread .topic-title { font-weight: 600; }
+
+.topic-card.removing {
+  animation: cardRemove 0.38s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes cardRemove {
+  0%   { opacity:1; transform:translateX(0);    max-height:80px; }
+  40%  { opacity:0; transform:translateX(16px); max-height:80px; }
+  100% { opacity:0; transform:translateX(16px); max-height:0; margin:0; padding:0; }
+}
+
+/* Card layout */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding-top: 1px;
+}
+
+.topic-type-icon { color: var(--text-3); }
+.topic-pin-icon  { color: var(--accent); }
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;  /* tighter title→meta */
+  min-width: 0;
+}
+
+#qms-list .card-body {
+  flex-direction: column-reverse;
+  gap: var(--space-md);
+}
+#qms-list .topic-meta { font-weight: 600; }
+
+.topic-title {
+  font-size: var(--font-lg);
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta line: clean straight, Regular weight — 2026 */
+.topic-meta {
+  font-size: var(--font-xs);
+  font-style: normal;
+  font-weight: 400;
+  color: rgba(255,255,255,0.50);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1.2;
+}
+
+/* Light theme: darken slightly for readability */
+body[data-theme="light"] .topic-meta {
+  color: rgba(26,25,21,0.45);
+}
+
+.topic-author {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* ============================================================
+   CARD ACTIONS — hidden by default, revealed on hover
+   ============================================================ */
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity var(--t-normal);
+}
+
+.topic-card:hover .card-actions { opacity: 1; }
+
+.action-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast);
+}
+.action-icon:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+  transform: scale(1.15);
+}
+.action-icon.loading { animation: spin 1s linear infinite; }
+
+/* ============================================================
+   SKELETON
+   ============================================================ */
+.skeleton-container { display: flex; flex-direction: column; gap: var(--space-md); }
+
+.skeleton-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+.skeleton-line {
+  background: var(--bg-3);
+  border-radius: var(--radius-sm);
+  height: 14px;
+  margin-bottom: var(--space-sm);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+.skeleton-title { width: 78%; height: 16px; }
+.skeleton-meta  { width: 48%; height: 12px; }
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.7; }
+}
+
+body[data-theme="liquid-glass"] .skeleton-line {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 100%);
+  background-size: 200% 100%;
+  animation: glassShimmer 1.4s ease-in-out infinite;
+}
+@keyframes glassShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  text-align: center;
+  min-height: 220px;
+}
+#empty-state { display: none !important; }
+
+.empty-icon {
+  width: 44px; height: 44px;
+  color: var(--accent);
+  margin-bottom: var(--space-lg);
+  animation: gentlePulse 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+@keyframes gentlePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.06); }
+}
+
+.empty-title {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: var(--space-sm);
+}
+.empty-subtitle {
+  font-size: var(--font-sm);
+  font-style: italic;
+  color: var(--text-3);
+  margin-bottom: var(--space-xl);
+}
+.empty-actions { display: flex; gap: var(--space-md); }
+
+.empty-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  color: var(--text-2);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: inherit;
+  box-shadow: var(--card-shadow);
+  transition: all var(--t-fast);
+}
+.empty-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+/* ============================================================
+   DATE DIVIDER — "Сегодня" thin separator
+   ============================================================ */
+.date-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+  pointer-events: none;
+  list-style: none;
+}
+.date-divider::before,
+.date-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  opacity: 0.55;
+}
+.date-divider-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+  opacity: 0.65;
+}
+body.compact-mode .date-divider  { padding: 2px; }
+body.compact-mode .date-divider-label { font-size: 7px; }
+
+/* ============================================================
+   COMPACT MODE
+   ============================================================ */
+body.compact-mode header            { padding: 10px 12px 8px !important; }
+body.compact-mode .header-top       { margin-bottom: 8px !important; }
+body.compact-mode main              { padding: 6px !important; }
+body.compact-mode .topics-list      { gap: 4px !important; }
+body.compact-mode .topic-card       { padding: 5px 8px 5px 10px !important; }
+body.compact-mode .topic-title      {
+  font-size: var(--font-sm) !important;
+  -webkit-line-clamp: 1 !important;
+  max-height: 15px !important;
+}
+body.compact-mode .topic-meta       { font-size: 9px !important; }
+body.compact-mode .stat-card        { padding: 5px 6px !important; }
+body.compact-mode .stat-number      { font-size: 14px !important; }
+body.compact-mode .stats-cards      { gap: 5px !important; }
+body.compact-mode .stats-cards      { grid-template-columns: repeat(3, 1fr) !important; }
+body.compact-mode .action-btn       { font-size: 9px !important; height: 22px !important; }
+body.compact-mode .action-buttons   { gap: 4px !important; margin-top: 7px !important; }
+
+/* ============================================================
+   SIMPLE CARD
+   ============================================================ */
+.topic-card.simple { padding: 7px 10px 7px 12px; }
+.topic-card.simple .topic-title { -webkit-line-clamp: 1; font-size: var(--font-md); }
+
+/* ============================================================
+   LIST CONTAINERS
+   ============================================================ */
+#topic-list,
+#qms-list,
+#mentions-list {
+  min-height: 0;
+  will-change: contents;
+  contain: layout style paint;
+}
+
+/* ============================================================
+   THEME TRANSITIONS
+   ============================================================ */
+body,
+header,
+.stat-card,
+.action-btn,
+.topic-card,
+main {
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    color 0.28s ease;
+}
+
+/* No text jank */
+.topic-title,
+.topic-meta,
+.user-name-text,
+.stat-number { transition: none; }
+
+/* ============================================================
+   B&W ICON MODE
+   ============================================================ */
+body.bw-icons .topic-type-icon,
+body.bw-icons .stat-icon,
+body.bw-icons .btn-icon,
+body.bw-icons .empty-icon {
+  filter: grayscale(100%);
+  opacity: 0.75;
+}
+
+/* ============================================================
+   FOUC PREVENTION
+   ============================================================ */
+body.loading { opacity: 0; }
+body { opacity: 1; transition: opacity 0.1s ease-in; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 420px) {
+  body { width: 100%; min-width: 320px; }
+  .stats-cards { gap: var(--space-xs); }
+  .action-buttons { flex-wrap: wrap; }
+}
+
+/* ============================================================
+   РЕЖИМ КОНЦЕНТРАЦИИ (Focus / Priority)
+   ============================================================ */
+
+/* Focused card: orange left border + subtle warm glow */
+.topic-card.focused {
+  border-left: 3px solid #f97316;
+  background: linear-gradient(90deg, rgba(249,115,22,0.07) 0%, transparent 60%);
+}
+
+.topic-card.focused .topic-focus-icon {
+  display: block !important;
+  color: #f97316;
+}
+
+/* Focus button — orange when active */
+.topic-card.focused .topic-focus-btn {
+  color: #f97316;
+}
+.topic-card.focused .topic-focus-btn:hover {
+  color: #ea580c;
+  background: rgba(249,115,22,0.15);
+}
+
+/* Normal focus button — shown on hover */
+.topic-focus-btn {
+  color: var(--text-3);
+}
+.topic-focus-btn:hover {
+  color: #f97316 !important;
+  background: rgba(249,115,22,0.12) !important;
+}
+
+/* Priority blink badge pulse animation on toolbar — cosmetic only (CSS side) */
+@keyframes priority-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(249,115,22,0.7); }
+  70%  { box-shadow: 0 0 0 6px rgba(249,115,22,0); }
+  100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
+}
+
+/* Focus header icon (small indicator in card-header) */
+.topic-focus-icon {
+  display: none;
+  width: 12px;
+  height: 12px;
+  color: #f97316;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   ТИХИЙ РЕЖИМ (Mute)
+   ============================================================ */
+
+/* Muted card: visually dimmed */
+.topic-card.muted {
+  opacity: 0.5;
+}
+.topic-card.muted:hover {
+  opacity: 0.8;
+}
+
+/* Muted indicator in header */
+.topic-mute-icon {
+  display: none;
+  width: 12px;
+  height: 12px;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+.topic-card.muted .topic-mute-icon {
+  display: block !important;
+}
+
+/* Mute button — shows red bell when active */
+.topic-card.muted .topic-mute-btn {
+  color: #ef4444;
+}
+.topic-card.muted .topic-mute-btn:hover {
+  color: #dc2626;
+  background: rgba(239,68,68,0.12) !important;
+}
+
+.topic-mute-btn:hover {
+  color: #ef4444 !important;
+  background: rgba(239,68,68,0.10) !important;
+}
+
+/* Muted card label */
+.topic-card.muted .topic-title::after {
+  content: " 🔕";
+  font-size: 0.75em;
+  opacity: 0.6;
+}
+
+
+/* ============================================================
+   РЕЖИМ КОНЦЕНТРАЦИИ — микро-блюр фона
+   Когда в списке есть хотя бы одна приоритетная тема,
+   все остальные карточки уходят на второй план
+   ============================================================ */
+
+/* Плавный переход для всех карточек */
+.topic-card {
+  transition:
+    filter       0.25s ease,
+    opacity      0.25s ease,
+    transform    0.20s ease,
+    background   var(--t-normal),
+    border-color var(--t-normal),
+    box-shadow   var(--t-normal);
+}
+
+/* Когда список "в фокусе" — размываем всех, кроме приоритетных */
+#topic-list.has-focused .topic-card:not(.focused) {
+  filter:  blur(1.2px) saturate(0.6);
+  opacity: 0.45;
+  transform: scale(0.992);
+}
+
+/* При наведении на размытую карточку — чуть проявляем */
+#topic-list.has-focused .topic-card:not(.focused):hover {
+  filter:  blur(0px) saturate(0.85);
+  opacity: 0.72;
+  transform: scale(1);
+}
+
+/* Приоритетная карточка — выходит вперёд */
+#topic-list.has-focused .topic-card.focused {
+  filter:  none;
+  opacity: 1;
+  transform: scale(1.012);
+  z-index: 2;
+  position: relative;
+}
+
+/* Liquid Glass — усиленный эффект: чуть больше blur, темнее */
+body[data-theme="liquid-glass"] #topic-list.has-focused .topic-card:not(.focused) {
+  filter:  blur(1.8px) saturate(0.4) brightness(0.75);
+  opacity: 0.38;
+}
+body[data-theme="liquid-glass"] #topic-list.has-focused .topic-card:not(.focused):hover {
+  filter:  blur(0px) saturate(0.80) brightness(0.95);
+  opacity: 0.70;
+}
+body[data-theme="liquid-glass"] #topic-list.has-focused .topic-card.focused {
+  box-shadow:
+    0 0 0 1px rgba(249,115,22,0.40),
+    0 8px 28px rgba(249,115,22,0.20),
+    var(--glass-inset, inset 0 1px 0 rgba(255,255,255,0.10));
+}
+

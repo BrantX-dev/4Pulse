@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4Pulse</title>
+    <link rel="stylesheet" href="popup.css">
+
+    <style>
+        /* SVG Icon система */
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
+        /* Аватар пользователя */
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            background-color: var(--theme-bg-secondary);
+            border: 2px solid var(--theme-border);
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        .icon-lg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .icon-xl {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Часы и дата — font-family inherited from body (set by applyFontSettings) */
+        .header-time {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        /* Плавные переходы без дерганья */
+        * {
+            transition: none;
+        }
+
+        .interactive {
+            transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+                       opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .interactive:hover {
+            transform: translateY(-1px);
+        }
+
+        .interactive:active {
+            transform: translateY(0);
+        }
+
+        /* Убираем дерганье при изменении контента */
+        #topic-list,
+        #qms-list,
+        #mentions-list {
+            /* min-height управляется через JS — не задаём здесь */
+        }
+
+        /* Плавное появление только для новых карточек (без анимации по умолчанию) */
+        .topic-card {
+            /* Убрали animation: fadeIn - было причиной дерганья */
+        }
+
+        /* ==================================================
+           СТИЛИ ДЛЯ INLINE-ЧАТА (БЫСТРЫЙ ОТВЕТ QMS)
+           ================================================== */
+
+        /* Читаем акцентные цвета 4Pulse */
+        :root { --chat-accent: #2982cc; }
+        [data-accent="purple"] { --chat-accent: #8e44ad; }
+        [data-accent="blue"] { --chat-accent: #2982cc; }
+        [data-accent="teal"] { --chat-accent: #16a085; }
+        [data-accent="orange"] { --chat-accent: #e67e22; }
+        [data-accent="red"] { --chat-accent: #e74c3c; }
+        [data-accent="pink"] { --chat-accent: #e84393; }
+
+        .qms-inline-chat {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--theme-border, #eee);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: default;
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+
+        .qms-history {
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: var(--font-sm, 13px);
+            background: var(--theme-bg-secondary, rgba(128, 128, 128, 0.05));
+            border: 1px solid var(--theme-border, rgba(128, 128, 128, 0.2));
+            border-radius: 6px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Уменьшаем высоту истории в компактном режиме, чтобы влезла форма! */
+        body.compact-mode .qms-history {
+            max-height: 130px;
+        }
+
+        .qms-history::-webkit-scrollbar { width: 6px; }
+        .qms-history::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.4); border-radius: 4px; }
+
+        .qms-msg {
+            padding: 6px 10px;
+            border-radius: 8px;
+            max-width: 90%;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .qms-msg.in {
+            background: rgba(128, 128, 128, 0.15); /* Универсальный полупрозрачный серый фон */
+            border: 1px solid var(--theme-border, rgba(128, 128, 128, 0.2));
+            color: inherit;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .qms-msg.out {
+            background: var(--chat-accent); /* Цвет берется из настроек расширения */
+            color: #ffffff !important;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .qms-msg * {
+            color: inherit !important;
+            background: transparent !important;
+        }
+
+        .qms-loading-text {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            padding: 10px;
+        }
+
+        .qms-reply-form {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .qms-textarea {
+            width: 100%;
+            min-height: 60px;
+            max-height: 120px;
+            resize: vertical;
+            padding: 8px;
+            border: 1px solid var(--theme-border, #ccc);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: var(--font-sm, 13px);
+            background: transparent;
+            color: inherit;
+            box-sizing: border-box;
+        }
+
+        .qms-textarea:focus {
+            outline: none;
+            border-color: var(--chat-accent); /* Рамка в цвет акцента */
+        }
+
+        .qms-reply-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .qms-reply-actions button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            background: var(--theme-bg-secondary, #eee);
+            color: inherit;
+            transition: background 0.15s;
+        }
+
+        .qms-reply-actions .qms-btn-send {
+            background: var(--chat-accent); /* Кнопка в цвет акцента */
+            color: #fff;
+        }
+
+        .qms-reply-actions .qms-btn-send:hover { filter: brightness(0.9); }
+        .qms-reply-actions button:hover:not(.qms-btn-send) { filter: brightness(0.9); }
+        .qms-reply-actions button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .qms-emoji-picker {
+            padding: 8px;
+            background: rgba(128, 128, 128, 0.05); /* Полупрозрачный фон, подстроится под любую тему */
+            border: 1px solid rgba(128, 128, 128, 0.2); /* Мягкая полупрозрачная рамка */
+            border-radius: 6px;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 6px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        body.compact-mode .qms-emoji-picker {
+            max-height: 80px; /* В компактном режиме панель чуть меньше */
+        }
+
+        .qms-emoji-picker::-webkit-scrollbar { width: 4px; }
+        .qms-emoji-picker::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.4); border-radius: 4px; }
+
+        .qms-emoji-item {
+            cursor: pointer;
+            text-align: center;
+            font-size: 18px;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+
+        .qms-emoji-item:hover {
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+    <div style="display: none;">
+        <?xml version="1.0" encoding="UTF-8"?>
+        <svg xmlns="http://www.w3.org/2000/svg">
+          <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="5"></circle>
+            <path d="M20 21a8 8 0 1 0-16 0"></path>
+          </symbol>
+
+          <symbol id="icon-message" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4C2.9 2 2 2.9 2 4v13c0 1.1.9 2 2 2h10.5l3.8 3.8c.2.2.5.1.6-.1.1-.2.1-.3.1-.5V19h1c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="currentColor"/>
+            <circle class="qms-dot" cx="8" cy="10.5" r="1.3"/>
+            <circle class="qms-dot" cx="12" cy="10.5" r="1.3"/>
+            <circle class="qms-dot" cx="16" cy="10.5" r="1.3"/>
+          </symbol>
+
+          <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </symbol>
+
+          <symbol id="icon-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </symbol>
+
+          <symbol id="icon-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+          </symbol>
+
+          <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </symbol>
+
+          <symbol id="icon-folder-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v11z"></path>
+            <path d="M2 9h20"></path>
+          </symbol>
+
+          <symbol id="icon-pin" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"></path>
+          </symbol>
+
+          <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </symbol>
+
+          <symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </symbol>
+
+          <symbol id="icon-smile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+            <line x1="9" y1="9" x2="9.01" y2="9"></line>
+            <line x1="15" y1="9" x2="15.01" y2="9"></line>
+          </symbol>
+
+          <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </symbol>
+
+          <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </symbol>
+
+          <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+          </symbol>
+
+          <symbol id="icon-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <line x1="10" y1="9" x2="8" y2="9"></line>
+          </symbol>
+
+          <symbol id="icon-at" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+          </symbol>
+
+          <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+            <polyline points="3 7 12 13 21 7"></polyline>
+          </symbol>
+
+          <symbol id="icon-external-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </symbol>
+        </svg>
+    </div>
+
+    <header>
+        <div class="header-top">
+            <div id="user-name" class="user-info interactive" title="Открыть профиль">
+                <img class="user-avatar" id="user-avatar" src="" alt="" style="display: none;">
+                <svg class="icon user-icon-fallback"><use href="#icon-user"></use></svg>
+                <span class="user-name-text">@username</span>
+            </div>
+            <div class="header-actions">
+                <button id="compact-toggle" class="compact-toggle interactive" title="Компактный режим">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="3" y1="15" x2="21" y2="15"></line>
+                    </svg>
+                </button>
+                <div id="refresh" class="refresh-btn interactive" title="Обновить данные">
+                    <svg class="icon"><use href="#icon-refresh"></use></svg>
+                </div>
+                <div id="options" class="settings-btn interactive" title="Настройки">
+                    <svg class="icon"><use href="#icon-settings"></use></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stats-header">
+                <div class="stats-title" data-i18n="popup_stats">Статистика</div>
+                <div class="header-time">
+                    <div class="time-date" id="current-date">Загрузка...</div>
+                    <div class="time-clock" id="current-time">00:00</div>
+                </div>
+            </div>
+            <div class="stats-cards">
+                <div class="stat-card interactive" id="stat-qms" data-type="qms" title="Открыть страницу QMS (Shift+клик для списка в попапе)">
+                    <svg class="stat-icon icon-xl"><use href="#icon-message"></use></svg>
+                    <div class="stat-label">QMS</div>
+                    <div class="stat-number">0</div>
+                </div>
+                <div class="stat-card interactive" id="stat-favorites" data-type="favorites" title="Открыть страницу избранного (Shift+клик для списка в попапе)">
+                    <svg class="stat-icon icon-xl"><use href="#icon-star"></use></svg>
+                    <div class="stat-label" data-i18n="popup_topics">Темы</div>
+                    <div class="stat-number">0</div>
+                </div>
+                <div class="stat-card interactive" id="stat-mentions" data-type="mentions" title="Открыть страницу упоминаний (Shift+клик для списка в попапе)">
+                    <svg class="stat-icon icon-xl"><use href="#icon-at"></use></svg>
+                    <div class="stat-label" data-i18n="popup_mentions">Ответы</div>
+                    <div class="stat-number">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="theme-actions" class="action-buttons">
+            <button id="themes-open-all" class="action-btn interactive" title="Открыть все непрочитанные темы">
+                <svg class="btn-icon icon"><use href="#icon-folder-open"></use></svg>
+                <span data-i18n="popup_open_all">Открыть все</span>
+            </button>
+            <button id="themes-open-all-pin" class="action-btn interactive" title="Открыть закреплённые темы">
+                <svg class="btn-icon icon"><use href="#icon-pin"></use></svg>
+                <span data-i18n="popup_pinned">Закреплённые</span>
+            </button>
+            <button id="themes-read-all" class="action-btn interactive" title="Пометить все прочитанными">
+                <svg class="btn-icon icon"><use href="#icon-check"></use></svg>
+                <span data-i18n="popup_read_all">Прочитать все</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 🎵 Mini Radio Player (shown only if radio_enabled) -->
+    <div id="mini-radio-bar" style="display:none; align-items:center; gap:8px; padding:6px 14px; background:var(--bg-secondary); border-bottom:1px solid var(--border); font-size:12px;">
+        <span style="font-size:14px;">🎵</span>
+        <span id="mini-radio-name" style="flex:1; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Радио</span>
+        <input type="range" id="mini-radio-vol" min="0" max="100" value="70" style="width:60px; accent-color:var(--accent);">
+        <button id="mini-radio-btn" class="interactive" style="background:none; border:none; cursor:pointer; font-size:18px; padding:2px 4px; color:var(--text-primary);" title="Play/Pause">▶</button>
+    </div>
+
+    <main>
+        <div id="loading-skeleton" class="skeleton-container hidden">
+            <div class="skeleton-card">
+                <div class="skeleton-line skeleton-title"></div>
+                <div class="skeleton-line skeleton-meta"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-line skeleton-title"></div>
+                <div class="skeleton-line skeleton-meta"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-line skeleton-title"></div>
+                <div class="skeleton-line skeleton-meta"></div>
+            </div>
+        </div>
+
+        <div id="empty-state" class="empty-state hidden">
+            <svg class="empty-icon icon-xl"><use href="#icon-target"></use></svg>
+            <div class="empty-title" id="empty-title" data-i18n="popup_empty">Непрочитанных тем нет</div>
+            <div class="empty-subtitle" data-i18n-prefix="popup_last_update">Последнее обновление: <span id="last-update-time">--:--</span></div>
+            <div class="empty-actions">
+                <button id="refresh-btn" class="empty-btn interactive">
+                    <svg class="btn-icon icon"><use href="#icon-refresh"></use></svg>
+                    Обновить
+                </button>
+                <button id="settings-btn" class="empty-btn interactive">
+                    <svg class="btn-icon icon"><use href="#icon-settings"></use></svg>
+                    Настройки
+                </button>
+            </div>
+        </div>
+
+        <ul id="topic-list" class="topics-list"></ul>
+
+        <ul id="qms-list" class="topics-list hidden"></ul>
+
+        <ul id="mentions-list" class="topics-list hidden"></ul>
+    </main>
+
+    <div id="templates" style="display:none!important;visibility:hidden;height:0;overflow:hidden;position:absolute;"  aria-hidden="true">
+        <template id="tpl-topic-card">
+            <li class="topic-card interactive">
+                <div class="card-header">
+                    <svg class="topic-type-icon icon"><use href="#icon-file-text"></use></svg>
+                    <svg class="topic-pin-icon icon hidden"><use href="#icon-pin"></use></svg>
+                    <svg class="topic-focus-icon icon hidden" title="Приоритет"><use href="#icon-target"></use></svg>
+                    <svg class="topic-mute-icon icon hidden" title="Тихий режим"><use href="#icon-bell"></use></svg>
+                </div>
+                <div class="card-body">
+                    <div class="topic-title">Заголовок темы</div>
+                    <div class="topic-meta">
+                        <span class="topic-author">
+                            <svg class="icon-sm"><use href="#icon-user"></use></svg>
+                            username
+                        </span>
+                        <span class="topic-time">• 5 минут назад</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="action-icon topic-focus-btn interactive" title="Режим концентрации: следить за темой">
+                        <svg class="icon"><use href="#icon-target"></use></svg>
+                    </button>
+                    <button class="action-icon topic-mute-btn interactive" title="Тихий режим: заглушить уведомления">
+                        <svg class="icon"><use href="#icon-bell"></use></svg>
+                    </button>
+                    <button class="action-icon mark-read interactive" title="Отметить прочитанным">
+                        <svg class="icon"><use href="#icon-eye"></use></svg>
+                    </button>
+                </div>
+            </li>
+        </template>
+
+        <template id="tpl-topic-card-simple">
+            <li class="topic-card simple interactive">
+                <div class="card-header">
+                    <svg class="topic-type-icon icon"><use href="#icon-file-text"></use></svg>
+                    <svg class="topic-pin-icon icon hidden"><use href="#icon-pin"></use></svg>
+                    <svg class="topic-focus-icon icon hidden" title="Приоритет"><use href="#icon-target"></use></svg>
+                    <svg class="topic-mute-icon icon hidden" title="Тихий режим"><use href="#icon-bell"></use></svg>
+                </div>
+                <div class="card-body">
+                    <div class="topic-title">Заголовок темы</div>
+                </div>
+                <div class="card-actions">
+                    <button class="action-icon topic-focus-btn interactive" title="Режим концентрации: следить за темой">
+                        <svg class="icon"><use href="#icon-target"></use></svg>
+                    </button>
+                    <button class="action-icon topic-mute-btn interactive" title="Тихий режим: заглушить уведомления">
+                        <svg class="icon"><use href="#icon-bell"></use></svg>
+                    </button>
+                    <button class="action-icon mark-read interactive" title="Отметить прочитанным">
+                        <svg class="icon"><use href="#icon-eye"></use></svg>
+                    </button>
+                </div>
+            </li>
+        </template>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
