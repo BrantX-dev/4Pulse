@@ -1,3 +1,8 @@
+## Screenshots
+![Main Interface](screenshots/sidebar.png)
+![Main interface](screenshots/popup.png)
+![Inline Chat](screenshots/chat.png)
+
 # 🚀 4Pulse: The Ultimate 4PDA Experience
 [🇷🇺 Описание на русском языке ниже](#-4pulse-профессиональный-инструмент-для-4pda)
 
