@@ -1,15 +1,14 @@
+# 4Pulse 
+### Advanced UI & UX Enhancement for 4PDA
+
+Modern, sleek, and functional browser extension with **Liquid Glass** design.
+
 ## Screenshots
 <p align="center">
   <img src="screenshots/popup.png" width="600">
-  <img src="screenshots/sidebar.png" width="600">
 </p>
 
-# 🚀 4Pulse: The Ultimate 4PDA Experience
-[🇷🇺 Описание на русском языке ниже](#-4pulse-профессиональный-инструмент-для-4pda)
-
-**4Pulse** is a powerful, modern Firefox extension designed to revolutionize how you interact with the 4PDA forum. It combines deep functionality with a stunning "Liquid Glass" aesthetic for the 2026 web.
-
-### 💎 Key Features:
+###  Key Features:
 * **Liquid Glass UI** — Ultra-modern frosted glass interface with adaptive gradients.
 * **Inline Chat** — Reply to QMS and forum threads directly within the extension popup.
 * **Firefox Sidebar Support** — Keep your forum life accessible in a persistent side panel.
@@ -21,19 +20,19 @@
 
 ---
 
-# 🚀 4Pulse: Профессиональный инструмент для 4PDA
+#  4Pulse: Профессиональный инструмент для 4PDA
 
 **4Pulse** — это современное расширение для Firefox, превращающее работу с форумом 4PDA в технологичное удовольствие. Наследник идей 4PDA Live, полностью переосмысленный для 2026 года.
 
-### ✨ Основные возможности:
-* **💎 Liquid Glass UI** — интерфейс с эффектом матового стекла и адаптивными переливами.
-* **💬 Инлайн-чат** — общайтесь в QMS и темах прямо в окне расширения.
-* **🖥 Поддержка Sidebar** — полноценная работа через боковую панель браузера.
-* **🎯 Режим концентрации (Focus/Priority)** — выделяйте важные темы и скрывайте лишнее.
-* **🔇 Тихий режим (Mute)** — мгновенно заглушайте уведомления от отдельных веток.
-* **🔤 Современная типографика** — огромный выбор шрифтов с идеальной кириллицей (Onest, Inter, Manrope).
-* **🌍 Мультиязычность** — полная локализация интерфейса.
-* **📻 Встроенное Радио** — любимая музыка всегда под рукой.
+###  Основные возможности:
+* ** Liquid Glass UI** — интерфейс с эффектом матового стекла и адаптивными переливами.
+* ** Инлайн-чат** — общайтесь в QMS и темах прямо в окне расширения.
+* ** Поддержка Sidebar** — полноценная работа через боковую панель браузера.
+* ** Режим концентрации (Focus/Priority)** — выделяйте важные темы и скрывайте лишнее.
+* ** Тихий режим (Mute)** — мгновенно заглушайте уведомления от отдельных веток.
+* ** Современная типографика** — огромный выбор шрифтов с идеальной кириллицей (Onest, Inter, Manrope).
+* ** Мультиязычность** — полная локализация интерфейса.
+* ** Встроенное Радио** — любимая музыка всегда под рукой.
 
 ---
 ### 🛠 Installation / Установка
