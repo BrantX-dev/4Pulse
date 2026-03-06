@@ -3,6 +3,8 @@
 
 Modern, sleek, and functional browser extension with **Liquid Glass** design.
 
+[![Firefox Add-on](https://img.shields.io/amo/v/4pulse.svg)](https://addons.mozilla.org/ru/firefox/addon/4pulse/)
+
 ## Screenshots
 <p align="center">
   <img src="screenshots/popup.png" width="600">
