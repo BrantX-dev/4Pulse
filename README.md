@@ -1,8 +1,7 @@
 ## Screenshots
 <p align="center">
-  <img src="screenshots/sidebar.png" width="600">
   <img src="screenshots/popup.png" width="600">
-  <img src="screenshots/chat.png" width="600">
+  <img src="screenshots/sidebar.png" width="600">
 </p>
 
 # 🚀 4Pulse: The Ultimate 4PDA Experience
