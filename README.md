@@ -1,7 +1,9 @@
 ## Screenshots
-![Main Interface](screenshots/sidebar.png)
-![Main interface](screenshots/popup.png)
-![Inline Chat](screenshots/chat.png)
+<p align="center">
+  <img src="screenshots/sidebar.png" width="600">
+  <img src="screenshots/popup.png" width="600">
+  <img src="screenshots/chat.png" width="600">
+</p>
 
 # 🚀 4Pulse: The Ultimate 4PDA Experience
 [🇷🇺 Описание на русском языке ниже](#-4pulse-профессиональный-инструмент-для-4pda)
